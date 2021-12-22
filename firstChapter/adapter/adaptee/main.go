@@ -6,6 +6,6 @@ type Adaptee struct {
 	adapterType int
 }
 
-func (Adaptee Adaptee) convert() {
+func (Adaptee Adaptee) Convert() {
 	fmt.Println("Adaptee convert method")
 }
