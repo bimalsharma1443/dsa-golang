@@ -1,8 +1,9 @@
 package adapter
 
 import (
-	"dsa/firstChapter/adapter/adaptee"
 	"fmt"
+
+	"github.com/bimalsharma1443/dsa-golang/adapter/adaptee"
 )
 
 type IProcess interface {
