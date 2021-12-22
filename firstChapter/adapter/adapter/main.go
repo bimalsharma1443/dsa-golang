@@ -3,7 +3,7 @@ package adapter
 import (
 	"fmt"
 
-	"github.com/bimalsharma1443/dsa-golang/adapter/adaptee"
+	"github.com/bimalsharma1443/dsa-golang/firstChapter/adapter/adaptee"
 )
 
 type IProcess interface {
