@@ -7,14 +7,19 @@ import (
 )
 
 type IProcess interface {
-	process()
+	Process()
 }
 
 type Adapter struct {
-	adaptee adaptee.Adaptee
+	Adaptee adaptee.Adaptee
 }
 
-func (adapter Adapter) process() {
+func (adapter Adapter) Process() {
 	fmt.Println("Adapter Process")
-	adapter.process()
+	adapter.Adaptee.Convert()
+}
+
+func main() {
+	var processor IProcess = Adapter{}
+	processor.Process()
 }
