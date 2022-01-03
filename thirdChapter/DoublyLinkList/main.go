@@ -100,13 +100,34 @@ func (list *LinkedList) LastNode() *Node {
 	return node
 }
 
+// NodeWithPrevNode
+func (list *LinkedList) NodeWithPrevNode(value int) *Node {
+	var node *Node
+	for node = list.headNode; node != nil; node = node.next {
+		if node.next != nil && node.next.value == value {
+			break
+		}
+	}
+	return node
+}
+
+// DeleteLinklist
+func (list *LinkedList) DeleteLinklist(value int) {
+	var currentNode *Node = list.NodeWithValue(value)
+	currentNode.prev.next = currentNode.next
+	currentNode.next.prev = currentNode.prev
+}
+
 func main() {
 	var list *LinkedList = &LinkedList{}
 	list.AddToHead(3)
 	list.AddToHead(2)
 	list.AddToEnd(5)
 	list.AddAfter(3, 4)
+	list.AddAfter(3, 10)
 	list.AddToEnd(6)
+	list.IterateList()
+	list.DeleteLinklist(10)
 	list.IterateList()
 	node := list.NodeBetweenValues(3, 5)
 
