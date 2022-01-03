@@ -67,6 +67,25 @@ func (list *LinkedList) AddAfter(findvalue, addValue int) {
 	oldnode.next = node
 }
 
+// NodeWithPrevNode
+func (list *LinkedList) NodeWithPrevNode(value int) *Node {
+	var node *Node
+	for node = list.headNode; node != nil; node = node.next {
+		if node.next != nil && node.next.value == value {
+			break
+		}
+	}
+	return node
+}
+
+// DeleteLinklist
+func (list *LinkedList) DeleteLinklist(value int) {
+	var currentNode *Node = list.NodeWithValue(value)
+	var prevNode *Node = list.NodeWithPrevNode(value)
+	prevNode.next = currentNode.next
+	currentNode.next = nil
+}
+
 func main() {
 	var list *LinkedList = &LinkedList{}
 	list.AddToHead(2)
@@ -76,4 +95,7 @@ func main() {
 	list.AddToEnd(6)
 	list.AddToEnd(7)
 	list.IterateList()
+	list.DeleteLinklist(6)
+	list.IterateList()
+
 }
