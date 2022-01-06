@@ -124,6 +124,74 @@ func (binarySearchTree *BinarySearchTree) MaxNode() *int {
 	}
 }
 
+func (binarySearchTree *BinarySearchTree) Search(key int) bool {
+	binarySearchTree.lock.RLock()
+	defer binarySearchTree.lock.RUnlock()
+	return search(binarySearchTree.rootNode, key)
+}
+
+func search(treenode *TreeNode, key int) bool {
+	if treenode == nil {
+		return false
+	}
+
+	if treenode.key > key {
+		return search(treenode.leftNode, key)
+	}
+
+	if treenode.key < key {
+		return search(treenode.rightNode, key)
+	}
+
+	return true
+}
+
+func (binarySearchTree *BinarySearchTree) RemoveNode(key int) {
+	binarySearchTree.lock.Lock()
+	defer binarySearchTree.lock.Unlock()
+	removeNode(binarySearchTree.rootNode, key)
+}
+
+func removeNode(treeNode *TreeNode, key int) *TreeNode {
+	if treeNode == nil {
+		return nil
+	}
+	if key < treeNode.key {
+		treeNode.leftNode = removeNode(treeNode.leftNode, key)
+		return treeNode
+	}
+	if key > treeNode.key {
+		treeNode.rightNode = removeNode(treeNode.rightNode, key)
+		return treeNode
+	}
+	// key == node.key
+	if treeNode.leftNode == nil && treeNode.rightNode == nil {
+		treeNode = nil
+		return nil
+	}
+	if treeNode.leftNode == nil {
+		treeNode = treeNode.rightNode
+		return treeNode
+	}
+	if treeNode.rightNode == nil {
+		treeNode = treeNode.leftNode
+		return treeNode
+	}
+	var leftmostrightNode *TreeNode
+	leftmostrightNode = treeNode.rightNode
+	for {
+		//find smallest value on the right side
+		if leftmostrightNode != nil && leftmostrightNode.leftNode != nil {
+			leftmostrightNode = leftmostrightNode.leftNode
+		} else {
+			break
+		}
+	}
+	treeNode.key, treeNode.value = leftmostrightNode.key, leftmostrightNode.value
+	treeNode.rightNode = removeNode(treeNode.rightNode, treeNode.key)
+	return treeNode
+}
+
 func (binarySearchTree *BinarySearchTree) String() {
 	binarySearchTree.lock.Lock()
 	defer binarySearchTree.lock.Unlock()
@@ -149,15 +217,26 @@ func stringify(treeNode *TreeNode, level int) {
 
 func main() {
 	var binarySearchTree *BinarySearchTree = &BinarySearchTree{}
-	binarySearchTree.InsertElement(8, 8)
+	binarySearchTree.InsertElement(15, 15)
+	binarySearchTree.InsertElement(5, 5)
+	binarySearchTree.InsertElement(20, 20)
 	binarySearchTree.InsertElement(3, 3)
+	binarySearchTree.InsertElement(8, 8)
+	binarySearchTree.InsertElement(16, 25)
+	binarySearchTree.InsertElement(7, 7)
+	binarySearchTree.InsertElement(11, 11)
 	binarySearchTree.InsertElement(10, 10)
-	binarySearchTree.InsertElement(1, 1)
-	binarySearchTree.InsertElement(6, 6)
-	binarySearchTree.String()
 	binarySearchTree.InOrderTraverseTree(func(i int) { fmt.Println(i) })
-	binarySearchTree.PreOrderTraverseTree(func(i int) { fmt.Println(i) })
-	binarySearchTree.PostOrderTraverseTree(func(i int) { fmt.Println(i) })
-	fmt.Println("Min node is : ", *binarySearchTree.MinNode())
-	fmt.Println("Max node is : ", *binarySearchTree.MaxNode())
+	// binarySearchTree.String()
+	// binarySearchTree.PreOrderTraverseTree(func(i int) { fmt.Println(i) })
+	// binarySearchTree.PostOrderTraverseTree(func(i int) { fmt.Println(i) })
+	// fmt.Println("Min node is : ", *binarySearchTree.MinNode())
+	// fmt.Println("Max node is : ", *binarySearchTree.MaxNode())
+	// if binarySearchTree.Search(10) {
+	// 	fmt.Println("node is available")
+	// } else {
+	// 	fmt.Println("node is not available")
+	// }
+	binarySearchTree.RemoveNode(8)
+	binarySearchTree.InOrderTraverseTree(func(i int) { fmt.Println(i) })
 }
